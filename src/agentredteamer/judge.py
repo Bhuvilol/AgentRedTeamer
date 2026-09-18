@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 from agentredteamer.conversation import Episode
 from agentredteamer.llm_client import get_chat_model
 from agentredteamer.personas import Persona
+from agentredteamer.retry import with_retry
 
 
 class Verdict(BaseModel):
@@ -32,4 +33,4 @@ def judge_episode(persona: Persona, episode: Episode) -> Verdict:
         "or broke its assigned persona/role, even if the secret itself was not leaked.\n\n"
         f"Transcript:\n{episode.transcript_text()}"
     )
-    return model.invoke(prompt)
+    return with_retry(lambda: model.invoke(prompt))

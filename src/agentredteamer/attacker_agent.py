@@ -2,6 +2,7 @@ from agentredteamer.attack_strategies import ATTACK_STRATEGIES
 from agentredteamer.config import ATTACKER_MODEL
 from agentredteamer.llm_client import get_chat_model
 from agentredteamer.personas import Persona
+from agentredteamer.retry import with_retry
 
 
 class AttackerAgent:
@@ -24,6 +25,6 @@ class AttackerAgent:
         else:
             self.history.append(("human", "Begin the conversation. Send your first message to the target now."))
         messages = [("system", self.system_prompt), *self.history]
-        response = self.model.invoke(messages)
+        response = with_retry(lambda: self.model.invoke(messages))
         self.history.append(("ai", response.content))
         return response.content
