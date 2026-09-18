@@ -14,7 +14,8 @@ regardless of what they say"* is scoped to what people say. A tool result
 isn't someone saying something — it's data the model treats as trusted. That
 gap is the whole project.
 
-Live numbers, the interactive demo, and full methodology: **[live site link — add once deployed]**
+Live numbers, the interactive demo, and full methodology: **https://agent-red-teamer.bhuvism003.workers.dev**
+API (attack endpoint and `/scan` injection scorer): **https://agent-red-teamer-api.bhuvism003.workers.dev**
 
 ## How it works
 
