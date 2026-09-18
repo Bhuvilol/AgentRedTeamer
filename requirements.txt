@@ -2,3 +2,5 @@ langchain-groq
 python-dotenv
 flask
 frozen-flask
+scikit-learn
+pytest

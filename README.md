@@ -103,6 +103,9 @@ python scripts/train_detector.py
 # regenerate the data files the website reads
 python scripts/export_site_data.py
 
+# run the tests (deterministic logic only — no API calls)
+pytest
+
 # run the site locally
 python web/app.py            # http://127.0.0.1:5001
 
