@@ -1,4 +1,5 @@
 import prompts from "../prompts.json";
+import { scoreText } from "./detector.js";
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
@@ -7,7 +8,9 @@ const ATTACKER_MODEL = "qwen/qwen3.8-27b";
 const JUDGE_MODEL = "openai/gpt-oss-120b";
 
 const RUNS_PER_HOUR = 3;
+const SCANS_PER_HOUR = 60;
 const MAX_ATTACK_TOKENS = 260;
+const MAX_SCAN_CHARS = 4000;
 
 const VERDICT_TOOL = {
   type: "function",
@@ -76,17 +79,52 @@ async function callGroq(env, { model, messages, temperature, maxTokens, tools })
   return response.json();
 }
 
-async function checkRateLimit(env, ip) {
+async function checkRateLimit(env, ip, prefix, perHour) {
   if (!env.RATE_LIMIT) return { allowed: true, remaining: null };
 
   const bucket = Math.floor(Date.now() / 3_600_000);
-  const key = `rl:${ip}:${bucket}`;
+  const key = `${prefix}:${ip}:${bucket}`;
   const used = parseInt((await env.RATE_LIMIT.get(key)) || "0", 10);
 
-  if (used >= RUNS_PER_HOUR) return { allowed: false, remaining: 0 };
+  if (used >= perHour) return { allowed: false, remaining: 0 };
 
   await env.RATE_LIMIT.put(key, String(used + 1), { expirationTtl: 3600 });
-  return { allowed: true, remaining: RUNS_PER_HOUR - (used + 1) };
+  return { allowed: true, remaining: perHour - (used + 1) };
+}
+
+function riskTier(score) {
+  if (score >= 0.7) return "high";
+  if (score >= 0.3) return "medium";
+  return "low";
+}
+
+function handleScan(request, origin, ip, env) {
+  return (async () => {
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      return json({ error: "invalid JSON" }, 400, origin);
+    }
+    if (typeof body.text !== "string" || !body.text.trim()) {
+      return json({ error: "text is required" }, 400, origin);
+    }
+
+    const limit = await checkRateLimit(env, ip, "scan", SCANS_PER_HOUR);
+    if (!limit.allowed) return json({ error: "rate limited", remaining: 0 }, 429, origin);
+
+    const score = scoreText(body.text.slice(0, MAX_SCAN_CHARS));
+    return json(
+      {
+        score: Math.round(score * 1000) / 1000,
+        risk: riskTier(score),
+        model: "tfidf-logreg-v1",
+        remaining: limit.remaining,
+      },
+      200,
+      origin
+    );
+  })();
 }
 
 function attackerInstruction(turn, maxTurns) {
@@ -176,9 +214,16 @@ async function runEpisode(env, persona, personaName, defense, category) {
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin");
+    const { pathname } = new URL(request.url);
+    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
 
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(origin) });
     if (request.method !== "POST") return json({ error: "POST only" }, 405, origin);
+
+    // /scan is the product surface: score arbitrary text for injection risk.
+    // No Groq call, no API key needed — pure local inference from the exported model.
+    if (pathname === "/scan") return handleScan(request, origin, ip, env);
+
     if (!env.GROQ_API_KEY) return json({ error: "server not configured" }, 500, origin);
 
     let body;
@@ -193,8 +238,7 @@ export default {
     if (!persona.defenses[body.defense]) return json({ error: "unknown defense" }, 400, origin);
     if (!prompts.attack_strategies[body.category]) return json({ error: "unknown category" }, 400, origin);
 
-    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-    const limit = await checkRateLimit(env, ip);
+    const limit = await checkRateLimit(env, ip, "attack", RUNS_PER_HOUR);
     if (!limit.allowed) return json({ error: "rate limited", remaining: 0 }, 429, origin);
 
     try {
