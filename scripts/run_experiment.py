@@ -2,13 +2,12 @@ import argparse
 import itertools
 from collections import Counter
 
-from groq import APIStatusError
-
 from agentredteamer.attack_strategies import ATTACK_STRATEGIES
 from agentredteamer.conversation import run_episode
 from agentredteamer.defenses import DEFENSES
 from agentredteamer.judge import judge_episode
 from agentredteamer.personas import ALL_PERSONAS
+from agentredteamer.retry import DailyQuotaExceeded
 from agentredteamer.trace_store import load_all_traces, save_trace
 
 MAX_TURNS_BY_CATEGORY = {"multi_turn_social_engineering": 5}
@@ -52,15 +51,11 @@ for index, (persona, defense_name, category) in enumerate(todo, start=1):
         episode = run_episode(persona=persona, defense_name=defense_name, attack_category=category, max_turns=max_turns)
         verdict = judge_episode(persona, episode)
         path = save_trace(episode, verdict)
-    except APIStatusError as e:
-        message = str(e)
-        if "per day" in message or "TPD" in message or "RPD" in message:
-            print(f"\nDaily quota reached. Stopping cleanly after {completed} new traces.")
-            print("Re-run this script tomorrow; finished combinations are skipped automatically.")
-            break
-        failures.append((persona.name, defense_name, category, message))
-        print(f"  -> FAILED: {message[:140]}")
-        continue
+    except DailyQuotaExceeded:
+        print(f"\nDaily quota reached. Stopping cleanly after {completed} new traces.")
+        print("Re-run this script (or scripts/watch_and_resume.sh) once quota resets; "
+              "finished combinations are skipped automatically.")
+        break
     except Exception as e:
         failures.append((persona.name, defense_name, category, str(e)))
         print(f"  -> FAILED: {e}")
