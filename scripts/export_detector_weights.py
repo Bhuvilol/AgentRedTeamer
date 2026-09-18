@@ -14,6 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 MODEL_PATH = ROOT / "data" / "detector.pkl"
 OUT_PATH = ROOT / "web" / "worker" / "detector_weights.json"
+STATIC_OUT_PATH = ROOT / "web" / "static" / "data" / "detector_weights.json"
 
 pipeline = pickle.loads(MODEL_PATH.read_bytes())
 features = pipeline.named_steps["features"]
@@ -42,6 +43,9 @@ export = {
     "n_char_features": len(char_vec.vocabulary_),
 }
 
-OUT_PATH.write_text(json.dumps(export))
+payload = json.dumps(export)
+OUT_PATH.write_text(payload)
+STATIC_OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+STATIC_OUT_PATH.write_text(payload)
 size_kb = OUT_PATH.stat().st_size // 1024
-print(f"exported {export['n_word_features']} word + {export['n_char_features']} char features -> {OUT_PATH} ({size_kb} KB)")
+print(f"exported {export['n_word_features']} word + {export['n_char_features']} char features -> {OUT_PATH} and {STATIC_OUT_PATH} ({size_kb} KB)")

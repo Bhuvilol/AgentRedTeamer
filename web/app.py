@@ -92,8 +92,10 @@ def build_context() -> dict:
         }
         for index, (name, rate) in enumerate(ranked)
     ]
+    worker_base = os.environ.get("WORKER_BASE_URL", "")
     return {
-        "api_url": os.environ.get("ATTACK_API_URL", ""),
+        "api_url": worker_base,
+        "scan_api_url": f"{worker_base}/scan" if worker_base else "",
         "summary": summary,
         "highlights": pick_highlights(traces),
         "defense_cards": defense_cards,
@@ -118,6 +120,11 @@ def dashboard():
 @app.route("/method/")
 def method():
     return render_template("method.html", active_page="method", **build_context())
+
+
+@app.route("/scan/")
+def scan():
+    return render_template("scan.html", active_page="scan", **build_context())
 
 
 if __name__ == "__main__":
