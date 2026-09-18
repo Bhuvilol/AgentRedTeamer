@@ -28,3 +28,13 @@ cp .env.example .env   # then fill in your GROQ_API_KEY
 ```
 python scripts/smoke_test.py
 ```
+
+## Troubleshooting
+
+**`ModuleNotFoundError: No module named 'agentredteamer'` after `pip install -e .` succeeds (macOS, Python 3.14+):**
+setuptools' editable install writes a `__editable__.*.pth` file that can end up with macOS's
+hidden-file flag set. Python 3.14 silently skips hidden `.pth` files as a security hardening,
+so the package stops being importable with no error at install time. Fix:
+```
+chflags nohidden .venv/lib/python3.14/site-packages/__editable__.agentredteamer*.pth
+```
