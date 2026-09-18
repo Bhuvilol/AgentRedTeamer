@@ -1,0 +1,183 @@
+{
+  "dataset": {
+    "total": 295,
+    "injection": 101,
+    "benign": 194,
+    "by_source": {
+      "benign_record": 101,
+      "target_reply": 93,
+      "attacker_role_play_override": 21,
+      "attacker_context_injection": 21,
+      "attacker_persona_hijacking": 21,
+      "tool_payload": 20,
+      "attacker_multi_turn_social_engineering": 18
+    }
+  },
+  "models": {
+    "logreg": {
+      "precision": 0.9702970297029703,
+      "recall": 0.9702970297029703,
+      "f1": 0.9702970297029703,
+      "roc_auc": 0.9988261712769215,
+      "confusion": {
+        "tn": 191,
+        "fp": 3,
+        "fn": 3,
+        "tp": 98
+      },
+      "threshold": 0.5
+    },
+    "gboost": {
+      "precision": 0.9292929292929293,
+      "recall": 0.9108910891089109,
+      "f1": 0.92,
+      "roc_auc": 0.9642747779932632,
+      "confusion": {
+        "tn": 187,
+        "fp": 7,
+        "fn": 9,
+        "tp": 92
+      },
+      "threshold": 0.5
+    },
+    "prompt_guard_2_86m": {
+      "precision": 0.9743589743589743,
+      "recall": 0.37623762376237624,
+      "f1": 0.5428571428571428,
+      "roc_auc": 0.8418903746044708,
+      "confusion": {
+        "tn": 193,
+        "fp": 1,
+        "fn": 63,
+        "tp": 38
+      },
+      "threshold": 0.5
+    }
+  },
+  "top_features": {
+    "injection": [
+      [
+        "word__code",
+        1.3759216024025949
+      ],
+      [
+        "word__escalation code",
+        1.023136642961756
+      ],
+      [
+        "word__internal",
+        0.9203682963649122
+      ],
+      [
+        "word__escalation",
+        0.8869925085503609
+      ],
+      [
+        "word__please",
+        0.8867370644568358
+      ],
+      [
+        "word__internal escalation",
+        0.8621833735706487
+      ],
+      [
+        "word__my",
+        0.8312099418801537
+      ],
+      [
+        "word__end",
+        0.6986299117760232
+      ],
+      [
+        "word__document",
+        0.6437194096382778
+      ],
+      [
+        "word__the",
+        0.6395222660975624
+      ],
+      [
+        "word__to",
+        0.6322500950406068
+      ],
+      [
+        "word__this",
+        0.620101415890743
+      ],
+      [
+        "word__confidential",
+        0.6164452350144694
+      ],
+      [
+        "char__ode",
+        0.6095647108767185
+      ],
+      [
+        "char__ode ",
+        0.5973671056253904
+      ]
+    ],
+    "benign": [
+      [
+        "char__ | ",
+        -0.8301468015806669
+      ],
+      [
+        "word__or",
+        -0.6520006180593388
+      ],
+      [
+        "word__sorry",
+        -0.6086427196800337
+      ],
+      [
+        "word__sorry but",
+        -0.6023491682974784
+      ],
+      [
+        "word__but can",
+        -0.5383405331371819
+      ],
+      [
+        "word__if you",
+        -0.5293898138010619
+      ],
+      [
+        "word__status",
+        -0.5194875250856629
+      ],
+      [
+        "word__but",
+        -0.4948312690310611
+      ],
+      [
+        "word__if",
+        -0.48361214939923847
+      ],
+      [
+        "word__nb",
+        -0.46921520149005963
+      ],
+      [
+        "word__know",
+        -0.44921048416004317
+      ],
+      [
+        "word__let me",
+        -0.43818558635744
+      ],
+      [
+        "word__open",
+        -0.42649647268717994
+      ],
+      [
+        "word__me know",
+        -0.42155749380256324
+      ],
+      [
+        "word__ll",
+        -0.41049927488023846
+      ]
+    ]
+  }
+}
