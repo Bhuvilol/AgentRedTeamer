@@ -53,6 +53,15 @@ def success_rate_matrix(traces: list[dict]) -> dict[str, dict[str, float | None]
     }
 
 
+def direct_vs_tool(traces: list[dict]) -> dict[str, float]:
+    direct = [t for t in traces if t["attack_category"] != "indirect_tool_injection"]
+    tool = [t for t in traces if t["attack_category"] == "indirect_tool_injection"]
+    return {
+        "direct": sum(_attack_success(t) for t in direct) / len(direct) if direct else 0.0,
+        "tool": sum(_attack_success(t) for t in tool) / len(tool) if tool else 0.0,
+    }
+
+
 def summarize() -> dict:
     traces = load_all_traces()
     return {
@@ -62,5 +71,6 @@ def summarize() -> dict:
         "by_defense": success_rate_by(traces, "defense_name"),
         "by_persona": success_rate_by(traces, "persona_name"),
         "single_vs_multi_turn": single_vs_multi_turn(traces),
+        "direct_vs_tool": direct_vs_tool(traces),
         "matrix": success_rate_matrix(traces),
     }

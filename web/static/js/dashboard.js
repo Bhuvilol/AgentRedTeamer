@@ -62,23 +62,37 @@ function clearTranscript() {
   el.transcript.innerHTML = "";
 }
 
-function appendTurn(speaker, message) {
+function buildTurn(speaker, message) {
   const row = document.createElement("div");
   row.className = speaker === "target" ? "turn turn-target" : "turn";
 
   const role = document.createElement("div");
+  const bubble = document.createElement("div");
+
+  if (speaker === "tool") {
+    role.className = "turn-role turn-role-tool";
+    role.textContent = "TOOL";
+    bubble.className = "bubble bubble-tool";
+    const label = document.createElement("span");
+    label.className = "bubble-tool-label";
+    label.textContent = "DATA RETURNED TO THE AGENT — NOT SENT BY THE USER";
+    bubble.append(label, document.createTextNode(message));
+    row.append(role, bubble);
+    return row;
+  }
+
   role.className = speaker === "target" ? "turn-role turn-role-target" : "turn-role turn-role-attacker";
   role.textContent = speaker === "target" ? "TARGET" : "ATTACKER";
-
-  const bubble = document.createElement("div");
   bubble.className = speaker === "target" ? "bubble bubble-target" : "bubble bubble-attacker";
   bubble.textContent = message;
 
-  if (speaker === "target") {
-    row.append(bubble, role);
-  } else {
-    row.append(role, bubble);
-  }
+  if (speaker === "target") row.append(bubble, role);
+  else row.append(role, bubble);
+  return row;
+}
+
+function appendTurn(speaker, message) {
+  const row = buildTurn(speaker, message);
   el.transcript.append(row);
   row.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
@@ -256,19 +270,7 @@ function openTrace(trace) {
   el.modalReasoning.textContent = trace.verdict.reasoning;
 
   el.modalTranscript.innerHTML = "";
-  trace.turns.forEach((turn) => {
-    const row = document.createElement("div");
-    row.className = turn.speaker === "target" ? "turn turn-target" : "turn";
-    const role = document.createElement("div");
-    role.className = turn.speaker === "target" ? "turn-role turn-role-target" : "turn-role turn-role-attacker";
-    role.textContent = turn.speaker === "target" ? "TARGET" : "ATTACKER";
-    const bubble = document.createElement("div");
-    bubble.className = turn.speaker === "target" ? "bubble bubble-target" : "bubble bubble-attacker";
-    bubble.textContent = turn.message;
-    if (turn.speaker === "target") row.append(bubble, role);
-    else row.append(role, bubble);
-    el.modalTranscript.append(row);
-  });
+  trace.turns.forEach((turn) => el.modalTranscript.append(buildTurn(turn.speaker, turn.message)));
 
   el.modal.showModal();
 }

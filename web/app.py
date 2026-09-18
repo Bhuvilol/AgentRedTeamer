@@ -33,6 +33,7 @@ CATEGORY_LABELS = {
     "context_injection": "Context injection",
     "persona_hijacking": "Persona hijacking",
     "multi_turn_social_engineering": "Multi-turn",
+    "indirect_tool_injection": "Tool injection",
 }
 
 
