@@ -1,0 +1,247 @@
+%-------------------------
+% Resume in Latex
+% Author: Bhabesh Behera — AI Agent Engineer
+%------------------------
+
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\setlength{\footskip}{10pt}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-.70in}
+\addtolength{\textheight}{1.45in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-5pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-4pt}]
+
+%----------CUSTOM COMMANDS----------
+
+\newcommand{\resumeItem}[1]{
+  \item\small{#1}
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-1pt}\item
+  \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \textbf{#1} & \textbf{\small #2} \\
+    \textit{\small#3} & \textit{\small #4} \\
+  \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+  \vspace{-1pt}\item
+  \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+    \small#1 & \textbf{\small #2}\\
+  \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeAchievementHeading}[2]{
+  \vspace{-1pt}\item
+  \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \textbf{#1} & \textit{\small #2} \\
+  \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeItemListStart}{
+  \begin{itemize}[leftmargin=0.15in, itemsep=1pt, parsep=0pt, topsep=2pt, label={\textbullet}]
+}
+\newcommand{\resumeItemListEnd}{
+  \end{itemize}\vspace{-2pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{
+  \begin{itemize}[leftmargin=0.0in, label={}, itemsep=2pt, parsep=0pt, topsep=0pt]
+}
+\newcommand{\resumeSubHeadingListEnd}{
+  \end{itemize}\vspace{-2pt}
+}
+
+% Consistent contact-line separator instead of repeated "~$|$~" hacks
+\newcommand{\contactsep}{\hspace{4pt}\textbullet\hspace{4pt}}
+
+%-------------------------------------------
+
+\begin{document}
+
+%----------HEADING----------
+
+\begin{center}
+    {\Huge \scshape Bhabesh Behera} \\[4pt]
+    {\Large \bfseries \color{black} AI Agent Engineer} \\[8pt]
+
+    \small
+    \faPhone\ \href{tel:+919078453027}{+91 9078453027}
+    \contactsep
+    \faEnvelope\ \href{mailto:bhabeshcse@gmail.com}{bhabeshcse@gmail.com}
+    \contactsep
+    \faGlobe\ \href{https://portfolio.bhuvism.in/}{portfolio.bhuvism.in}
+    \contactsep
+    \faGithub\ \href{https://github.com/Bhuvilol}{github.com/Bhuvilol}
+    \contactsep
+    \faLinkedin\ \href{https://www.linkedin.com/in/bhabesh-behera-347469248/}{LinkedIn}
+    \contactsep
+    \faTwitter\ \href{https://x.com/0xbhuvi}{@0xbhuvi}
+    \\[6pt]
+    \color{black}\rule{\textwidth}{0.6pt}
+\end{center}
+\vspace{-8pt}
+
+%-----------SUMMARY-----------
+
+\section{Summary}
+CS undergraduate specializing in \textbf{AI agent engineering} --- building, evaluating, and adversarially testing LLM-powered agentic systems. Shipped production AI automation at \textbf{Delaware.gov}; \textbf{Winner, UIDAI Data Hackathon}; presented at \textbf{PROXIMA 2026} (1000+ attendees).
+
+%-----------EDUCATION-----------
+
+\section{Education}
+\resumeSubHeadingListStart
+\resumeSubheading
+  {Institute of Technical Education and Research (ITER), SOA University}{2023 -- 2027}
+  {B.Tech in Computer Science and Engineering (Cybersecurity)}{CGPA: 8.88 / 10}
+\resumeSubHeadingListEnd
+
+%-----------SKILLS-----------
+
+\section{Skills}
+\small
+\textbf{Languages:} Python (preferred), JavaScript, Java \\[1pt]
+\textbf{Agentic AI \& LLM Systems:} Multi-Agent Orchestration, RAG Pipelines, MCP, Tool Calling \& Function Calling, Intent Classification \\[1pt]
+\textbf{AI Evaluation \& Safety:} Prompt Engineering (CoT), Adversarial LLM Testing, Eval Harness Design, Structured Output Validation \\[1pt]
+\textbf{Frameworks \& APIs:} LangChain, LangGraph, OpenAI API, Anthropic API, PyTorch, scikit-learn, NumPy, pandas \\[1pt]
+\textbf{Backend \& Data:} Node.js, Express.js, FastAPI, REST APIs, PostgreSQL, Prisma, Vector DBs (Chroma, Pinecone), Airflow \\[1pt]
+\textbf{Tools \& DevOps:} Git, GitHub, Docker, Docker Compose, CI/CD Pipelines, Postman, Linux
+
+%-----------EXPERIENCE-----------
+
+\section{Experience}
+\resumeSubHeadingListStart
+
+\resumeSubheading
+  {AI \& Automation Engineering Intern}{Feb 2026 -- Apr 2026}
+  {Delaware.gov, Dept.\ of Technology \& Information (DTI)}{Remote}
+
+\resumeItemListStart
+  \resumeItem{
+    Deployed an \textbf{Isolation Forest} and \textbf{PyTorch autoencoder} for
+    anomaly scoring beyond the 99th percentile; \textbf{PSI/KL divergence}
+    profiling detected silent drift across \textbf{10+ production datasets},
+    emitting structured reason codes into a central audit layer.
+  }
+  \resumeItem{
+    Orchestrated a nightly \textbf{Airflow DAG} combining ML scores with business
+    rules into a weighted pipeline, auto-generating S3 reports, alerts, and an
+    HTML dashboard --- \textbf{100\% automated}, zero missed alert cycles.
+  }
+\resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+
+\section{Projects}
+\resumeSubHeadingListStart
+
+\resumeProjectHeading
+  {
+    \textbf{\href{https://agent-red-teamer.bhuvism003.workers.dev}{Agent Red-Teamer --- Adversarial LLM Testing System}}
+    $|$ \emph{Python, Groq API, LangChain, Function Calling, scikit-learn, Cloudflare Workers}
+  }{2026}
+\resumeItemListStart
+  \resumeItem{
+    Engineered a 3-agent adversarial testing harness (attacker, target, LLM judge)
+    across \textbf{5 attack classes}, \textbf{6 defense strategies}, and
+    \textbf{3 target configurations}, with judge verdicts issued via function
+    calling instead of free-text parsing.
+  }
+  \resumeItem{
+    Found all \textbf{4 direct-prompt attacks} blocked \textbf{100\%} of the
+    time --- even 5-turn social engineering --- while the identical secret
+    leaked in \textbf{$\sim$8\%} of attempts via a poisoned tool-call return
+    value, exposing that prompt defenses do not cover agent tool output.
+  }
+  \resumeItem{
+    Trained a TF-IDF + logistic-regression classifier (\textbf{AUC 0.999})
+    beating Meta's Llama Prompt Guard 2 (\textbf{AUC 0.842}) on the same
+    benchmark; shipped it as a public sub-50ms edge \texttt{/scan} API on
+    Cloudflare Workers.
+  }
+\resumeItemListEnd
+
+\resumeProjectHeading
+  {
+    \textbf{\href{https://github.com/Bhuvilol/CAIR-CD}{CAIR-CD --- Agentic Intent Classification Pipeline}}
+    $|$ \emph{Python, LangChain, LangGraph, OpenAI API, Streamlit}
+  }{2025}
+\resumeItemListStart
+  \resumeItem{
+    Designed an \textbf{end-to-end LLM agent pipeline} with multi-step planning
+    and memory processing \textbf{10K+ records}; \textbf{15+ CoT-engineered
+    features} lifted intent classification accuracy \textbf{35\%} over zero-shot.
+  }
+  \resumeItem{
+    Built a \textbf{RAG layer} (Chroma) with an \textbf{MCP-compatible} tool
+    interface; a custom eval harness traced \textbf{60\% of misclassifications}
+    to ambiguous behavioral signals, driving the feature redesign.
+  }
+\resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%-----------ACHIEVEMENTS & LEADERSHIP-----------
+
+\section{Achievements \& Leadership}
+\resumeSubHeadingListStart
+
+\resumeAchievementHeading{Hackathon Achievements \& Showcases}{2024--2026}
+\resumeItemListStart
+  \resumeItem{
+    \textbf{Winner, UIDAI Data Hackathon} (national) --- Multi-Lens AI Framework
+    for Security-Aware Governance. \quad
+    \textbf{Runner-Up, SOA Ideathon 2025} --- Praman, a blockchain supply-chain
+    platform on Polygon/IPFS.
+  }
+  \resumeItem{
+    \textbf{Honorary Mention, ETHIndia 2025} --- skill-based DeFi app built in
+    24 hours among \textbf{500+ teams}. \quad
+    Presented \textbf{TrustSeal} (IoT + smart-contract tracking) at
+    \textbf{PROXIMA 2026} to 1000+ attendees.
+  }
+\resumeItemListEnd
+
+\resumeAchievementHeading{Community \& Leadership}{CNxITER, Odisha DAO}
+\resumeItemListStart
+  \resumeItem{
+    Active contributor, Developer Student Clubs and Odisha DAO ---
+    \textbf{25+ public GitHub PRs}; organized Codequest, Kodlama, Techwiz, Tormenta.
+  }
+\resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}
