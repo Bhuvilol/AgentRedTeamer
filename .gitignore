@@ -7,3 +7,5 @@ data/traces/*.json
 !data/traces/.gitkeep
 .DS_Store
 web/build/
+web/worker/.wrangler/
+.wrangler/

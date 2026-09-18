@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "agent-red-teamer",
+  "compatibility_date": "2026-09-18",
+  "account_id": "2887335f89ba6bc2cc135a5a5ada0600",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "build"
+  }
+}
