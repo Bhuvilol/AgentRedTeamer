@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Agent Red-Teamer{% endblock %}
+
+{% block content %}
+
+<section class="section" style="padding-top:56px; padding-bottom:0;">
+  <div class="art art-lavender" style="left:-200px; top:-60px; width:560px; height:440px;"></div>
+  <div class="art art-peach" style="right:-180px; top:120px; width:520px; height:420px;"></div>
+  <div class="art-dots"></div>
+
+  <div class="wrap">
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap;">
+      <div>
+        <h1 style="font-size:34px;">Run an attack yourself</h1>
+        <p style="font-size:15px; color:var(--ink-muted); margin:8px 0 0;">
+          Pick a target, a defense and an attack class. The attacker agent writes the prompts live.
+        </p>
+      </div>
+      <span class="pill" id="quota-pill" style="background:oklch(0.93 0.07 155); color:oklch(0.35 0.11 155);">
+        <span class="dot" style="background:oklch(0.55 0.15 155);"></span>
+        <span id="quota-text">Live</span>
+      </span>
+    </div>
+
+    <svg class="doodle" width="120" height="58" viewBox="0 0 120 58" fill="none" style="right:260px; top:108px;">
+      <path d="M112 6 C 80 12, 48 26, 14 44" stroke="oklch(0.55 0.02 60)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M26 34 L 12 45 L 28 50" stroke="oklch(0.55 0.02 60)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="scribble" style="right:110px; top:86px; transform:rotate(4deg); width:150px;">real API calls, not a recording</div>
+
+    <!-- config -->
+    <div class="card console-config" style="margin-top:34px; padding:22px 24px;">
+      <div class="config-group">
+        <div class="config-label">TARGET</div>
+        <div class="chip-row" id="target-chips">
+          {% for persona in personas %}
+          <button class="chip" type="button" data-persona="{{ persona.name }}" aria-pressed="{{ 'true' if loop.first else 'false' }}">
+            {{ persona.name | replace(' Assistant', '') | replace(' Internal', '') }}
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div style="width:1px; align-self:stretch; background:var(--border);"></div>
+
+      <div class="config-group">
+        <label class="config-label" for="defense-select">DEFENSE</label>
+        <select class="config-select mono" id="defense-select">
+          {% for name in defense_names %}<option value="{{ name }}">{{ name }}</option>{% endfor %}
+        </select>
+      </div>
+
+      <div class="config-group">
+        <label class="config-label" for="category-select">ATTACK CLASS</label>
+        <select class="config-select mono" id="category-select">
+          {% for name in attack_categories %}<option value="{{ name }}">{{ name }}</option>{% endfor %}
+        </select>
+      </div>
+
+      <button class="btn btn-accent" id="run-btn" type="button">
+        <span id="run-label">Run attack</span>
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M3 2 L11 6.5 L3 11 Z" fill="currentColor"/></svg>
+      </button>
+    </div>
+
+    <!-- console -->
+    <div class="card card-flush" style="margin-top:20px;">
+      <div class="console-head">
+        <span style="font-size:13px; font-weight:700;">Conversation</span>
+        <span class="mono" id="console-meta" style="font-size:11px; color:var(--ink-faint);">idle</span>
+      </div>
+
+      <div class="transcript" id="transcript">
+        <div class="empty" id="transcript-empty">
+          Choose a configuration above and hit <strong>Run attack</strong> to watch a live adversarial conversation.
+        </div>
+      </div>
+
+      <div class="verdict-bar" id="verdict-bar">
+        <span class="badge" id="verdict-badge" style="background:var(--border); color:var(--ink-faint);">NO VERDICT YET</span>
+        <div class="verdict-text" id="verdict-text">
+          Once the conversation completes, an independent judge model reads the full transcript and returns a structured
+          verdict &mdash; whether the secret leaked, whether the persona broke, and why.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRACE BROWSER ================= -->
+<section class="section" style="padding-top:76px;">
+  <div class="art art-mint" style="left:120px; top:40px; width:460px; height:360px;"></div>
+  <div class="art art-butter" style="right:60px; bottom:60px; width:420px; height:340px;"></div>
+
+  <div class="wrap">
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:24px; gap:20px; flex-wrap:wrap;">
+      <div>
+        <h2 style="font-size:30px;"><span id="trace-count">{{ summary.total_traces }}</span> logged traces</h2>
+        <p style="font-size:15px; color:var(--ink-muted); margin:8px 0 0;">Every conversation from the full experiment, with the judge&rsquo;s reasoning.</p>
+      </div>
+      <div class="chip-row" id="verdict-filters">
+        <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+        <button class="chip" type="button" data-filter="leaked" aria-pressed="false">Leaked</button>
+        <button class="chip" type="button" data-filter="broke" aria-pressed="false">Broke character</button>
+        <button class="chip" type="button" data-filter="blocked" aria-pressed="false">Blocked</button>
+      </div>
+    </div>
+
+    <div class="card card-flush">
+      <div class="table-head">
+        <div>TRACE</div>
+        <div>TARGET / DEFENSE</div>
+        <div class="table-hide-sm">ATTACK CLASS</div>
+        <div class="table-hide-sm">TURNS</div>
+        <div>VERDICT</div>
+      </div>
+      <div id="trace-rows">
+        <div class="empty">Loading traces&hellip;</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<dialog class="trace-modal" id="trace-modal">
+  <div class="console-head">
+    <span style="font-size:13px; font-weight:700;" id="modal-title">Trace</span>
+    <button class="btn btn-sm btn-ghost" type="button" id="modal-close">Close</button>
+  </div>
+  <div class="transcript" id="modal-transcript"></div>
+  <div class="verdict-bar">
+    <span class="badge" id="modal-badge">&nbsp;</span>
+    <div class="verdict-text" id="modal-reasoning"></div>
+  </div>
+</dialog>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.ARENA_CONFIG = {
+    apiUrl: {{ api_url | tojson }},
+    tracesUrl: {{ url_for('static', filename='data/traces.json') | tojson }}
+  };
+</script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

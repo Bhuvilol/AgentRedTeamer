@@ -25,7 +25,7 @@ class Episode:
 
 def run_episode(persona: Persona, defense_name: str, attack_category: str, max_turns: int) -> Episode:
     target = TargetAgent(persona=persona, defense_name=defense_name)
-    attacker = AttackerAgent(persona=persona, category=attack_category)
+    attacker = AttackerAgent(persona=persona, category=attack_category, max_turns=max_turns)
     episode = Episode(persona_name=persona.name, defense_name=defense_name, attack_category=attack_category)
 
     target_reply = None

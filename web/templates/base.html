@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}Agent Red-Teamer{% endblock %}</title>
+  <meta name="description" content="An attacker agent generates adversarial prompts against LLM assistants running six system-prompt defenses. An LLM judge scores every transcript.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-brand" href="{{ url_for('index') }}">
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+      <path d="M13 2.5 L22 6.5 V13 C22 18 18 22 13 23.5 C8 22 4 18 4 13 V6.5 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M9.5 12.5 L16.5 12.5 M13 9 L13 16" stroke="oklch(0.55 0.18 30)" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <span>Agent Red&#8209;Teamer</span>
+  </a>
+
+  <div class="nav-links">
+    <a href="{{ url_for('index') }}#findings">Findings</a>
+    <a href="{{ url_for('index') }}#defenses">Defenses</a>
+    <a href="{{ url_for('dashboard') }}" {% if active_page == 'dashboard' %}class="active"{% endif %}>Dashboard</a>
+    <a href="{{ url_for('method') }}" {% if active_page == 'method' %}class="active"{% endif %}>Method</a>
+  </div>
+
+  <div class="nav-actions">
+    <a class="btn btn-sm btn-ghost" href="https://github.com/Bhuvilol/AgentRedTeamer">GitHub</a>
+    {% if active_page != 'dashboard' %}
+    <a class="btn btn-sm btn-accent" href="{{ url_for('dashboard') }}">
+      Open dashboard
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11 L11 3 M5 3 H11 V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    {% endif %}
+  </div>
+</nav>
+
+{% block content %}{% endblock %}
+
+<footer class="section section-dark" style="padding-bottom:60px;">
+  <div class="art art-peach" style="left:50%; bottom:-140px; width:760px; height:340px; transform:translateX(-50%); opacity:0.5;"></div>
+  <div class="wrap">
+    {% block footer_cta %}
+    <div class="center" style="max-width:640px; margin:0 auto;">
+      <h2 style="font-size:36px; line-height:1.15;">Every transcript is public. Read the ones that got through.</h2>
+      <p style="font-size:15px; color:oklch(0.68 0.01 60); margin-top:16px; line-height:1.6;">
+        {{ summary.total_traces }} logged conversations, the judge&rsquo;s reasoning for each verdict, and the full methodology.
+      </p>
+      <div style="display:flex; gap:12px; justify-content:center; margin-top:30px; flex-wrap:wrap;">
+        <a class="btn btn-light" href="{{ url_for('dashboard') }}">Browse the traces</a>
+        <a class="btn btn-outline-dark" href="{{ url_for('method') }}">Read the method</a>
+      </div>
+    </div>
+    {% endblock %}
+
+    <div class="footer-meta">
+      <span>Agent Red-Teamer &mdash; adversarial LLM testing system</span>
+      <span>Python &middot; LangChain &middot; Groq &middot; function calling</span>
+    </div>
+  </div>
+</footer>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

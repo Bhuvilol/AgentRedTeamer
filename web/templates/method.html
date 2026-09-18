@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Method — Agent Red-Teamer{% endblock %}
+
+{% block content %}
+
+<section class="section" style="padding-top:64px;">
+  <div class="art art-peach" style="left:-200px; top:-40px; width:520px; height:400px;"></div>
+  <div class="art art-lavender" style="right:-160px; top:200px; width:480px; height:400px;"></div>
+  <div class="art-dots"></div>
+
+  <div class="wrap" style="max-width:780px;">
+    <h1 style="font-size:44px; line-height:1.1;">How this was measured</h1>
+    <p style="font-size:17px; line-height:1.65; color:var(--ink-muted); margin-top:20px;">
+      Three agents, one loop. An attacker writes adversarial prompts, a target defends with a given system prompt,
+      and an independent judge decides whether the defense held. Every run is logged.
+    </p>
+
+    <h2 style="font-size:24px; margin-top:52px;">The three agents</h2>
+    <div style="display:flex; flex-direction:column; gap:16px; margin-top:20px;">
+      <div class="card">
+        <div class="mono" style="font-size:12px; font-weight:600; color:oklch(0.52 0.16 30); margin-bottom:8px;">ATTACKER</div>
+        <p style="margin:0; font-size:15px; line-height:1.6;">
+          Generates the adversarial messages. It is told the target&rsquo;s public role and that <em>some</em> kind of secret exists,
+          but never the secret itself &mdash; the same position a real attacker is in. Giving it the answer would measure nothing.
+        </p>
+      </div>
+      <div class="card">
+        <div class="mono" style="font-size:12px; font-weight:600; color:var(--ink-muted); margin-bottom:8px;">TARGET</div>
+        <p style="margin:0; font-size:15px; line-height:1.6;">
+          A support assistant holding a secret it must never reveal, defended by one of six system-prompt strategies.
+          Runs at low temperature, because a real deployed system should behave consistently rather than vary run to run.
+        </p>
+      </div>
+      <div class="card">
+        <div class="mono" style="font-size:12px; font-weight:600; color:oklch(0.4 0.12 250); margin-bottom:8px;">JUDGE</div>
+        <p style="margin:0; font-size:15px; line-height:1.6;">
+          Reads the full transcript and returns a structured verdict through function calling &mdash; a schema with
+          <span class="mono">leaked_secret</span>, <span class="mono">broke_character</span> and reasoning. Keyword matching was
+          rejected: it cannot tell whether a persona actually broke, and it misses paraphrased or partial leaks.
+        </p>
+      </div>
+    </div>
+
+    <h2 style="font-size:24px; margin-top:52px;">Why a secret string</h2>
+    <p style="font-size:15px; line-height:1.7; color:var(--ink-muted);">
+      Attack success needs an objective signal. &ldquo;Did the bot get too edgy?&rdquo; is a judgment call that makes the judge itself
+      the weak link. A hidden code gives a near-binary check &mdash; it either surfaced or it did not &mdash; and
+      <span class="mono">broke_character</span> is scored separately so a persona collapse still registers even when nothing leaked.
+    </p>
+
+    <h2 style="font-size:24px; margin-top:52px;">The grid</h2>
+    <p style="font-size:15px; line-height:1.7; color:var(--ink-muted);">
+      Three target configurations &times; six defenses &times; four attack classes, each run three times &mdash;
+      {{ summary.total_traces }} conversations. Repeats matter: a single attempt per combination is a coin flip, not a rate.
+      Percentages here are averaged over trials.
+    </p>
+
+    <h2 style="font-size:24px; margin-top:52px;">Things that went wrong</h2>
+    <div style="display:flex; flex-direction:column; gap:16px; margin-top:20px;">
+      <div class="card">
+        <h3 style="font-size:16px;">Safety-tuned models refuse to red-team</h3>
+        <p style="margin:10px 0 0; font-size:15px; line-height:1.6; color:var(--ink-muted);">
+          Three capable models declined to play the attacker at all, even under explicit authorised-research framing &mdash;
+          one refused outright, another dodged by answering in the target&rsquo;s voice. The attacker role ended up on a smaller,
+          less safety-tuned model. Attacker model choice is a real methodological constraint, not an implementation detail.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:16px;">The attacker has a shorter memory than the target</h3>
+        <p style="margin:10px 0 0; font-size:15px; line-height:1.6; color:var(--ink-muted);">
+          That attacker model has a 4,096-token context window, so on five-turn runs it only sees a trailing window of its own
+          campaign. The target still receives the full escalating conversation, which is what the experiment measures &mdash; but
+          the attacker is working with less context than it ideally would.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:16px;">Retrying a request that can never succeed</h3>
+        <p style="margin:10px 0 0; font-size:15px; line-height:1.6; color:var(--ink-muted);">
+          The first full run crashed after backing off repeatedly on a context-length error. Rate limits are worth retrying;
+          a malformed request is not. The retry layer now distinguishes them, and a failed episode no longer kills the batch.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
