@@ -22,12 +22,10 @@ def success_rate_by(traces: list[dict], key: str) -> dict[str, float]:
 def single_vs_multi_turn(traces: list[dict]) -> dict[str, float]:
     single_turn = [t for t in traces if t["attack_category"] != "multi_turn_social_engineering"]
     multi_turn = [t for t in traces if t["attack_category"] == "multi_turn_social_engineering"]
-    result = {}
-    if single_turn:
-        result["single_turn"] = sum(_attack_success(t) for t in single_turn) / len(single_turn)
-    if multi_turn:
-        result["multi_turn"] = sum(_attack_success(t) for t in multi_turn) / len(multi_turn)
-    return result
+    return {
+        "single_turn": sum(_attack_success(t) for t in single_turn) / len(single_turn) if single_turn else 0.0,
+        "multi_turn": sum(_attack_success(t) for t in multi_turn) / len(multi_turn) if multi_turn else 0.0,
+    }
 
 
 def success_rate_matrix(traces: list[dict]) -> dict[str, dict[str, float | None]]:

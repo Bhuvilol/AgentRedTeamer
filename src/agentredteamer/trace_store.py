@@ -4,7 +4,7 @@ import uuid
 from pathlib import Path
 
 from agentredteamer.conversation import Episode
-from agentredteamer.judge import Verdict
+from agentredteamer.judge import verdict as Verdict
 
 TRACES_DIR = Path(__file__).resolve().parent.parent.parent / "data" / "traces"
 

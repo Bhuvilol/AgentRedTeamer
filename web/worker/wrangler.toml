@@ -1,0 +1,13 @@
+name = "agent-red-teamer-api"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+# Rate limiting store. Create with:
+#   npx wrangler kv namespace create RATE_LIMIT
+# then paste the returned id below.
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT"
+# id = "PASTE_KV_NAMESPACE_ID_HERE"
+
+# GROQ_API_KEY is a secret, never committed. Set it with:
+#   npx wrangler secret put GROQ_API_KEY
