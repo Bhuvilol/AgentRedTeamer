@@ -19,7 +19,7 @@ That gap — prompt-level defenses don't cover tool output — is the whole
 project. Everything downstream (the detector, the edge API, the SaaS framing)
 exists to close it.
 
-**Live:** https://agent-red-teamer.bhuvism003.workers.dev · **API:** https://agent-red-teamer-api.bhuvism003.workers.dev
+**Live:** https://art.bhuvism.in/ · **API:** https://agent-red-teamer-api.bhuvism003.workers.dev
 **The full narrative** — what broke, what this solves, the product case — is in [`STORY.md`](STORY.md).
 
 ---
